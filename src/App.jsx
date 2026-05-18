@@ -11,7 +11,7 @@ const artImages = Array.from({ length: 16 }, (_, i) => `/art/art-${i + 1}.jpg`);
 
 const text = {
   en: {
-    tag: "Web3 Portfolio",
+    tag: "Web3 Profile",
     title: "Hello. I'm Richard",
     subtitle: "Fulltime web3. Researcher & Moderator",
     desc: "I help web3 projects build stronger communities, support users, research ecosystems, and communicate complex ideas in a simple way.",
