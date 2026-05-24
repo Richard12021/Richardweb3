@@ -4,7 +4,6 @@ const socialLinks = [
   { name: "X", href: "https://x.com/Richardx122", icon: "𝕏" },
   { name: "GitHub", href: "https://github.com/Richard12021", icon: "GH" },
   { name: "LinkedIn", href: "https://www.linkedin.com/in/quoc-vu-le-985135228/", icon: "IN" },
-  { name: "Medium", href: "https://medium.com/@lequocvu1997", icon: "M" },
 ];
 
 const artImages = Array.from({ length: 16 }, (_, i) => `/art/art-${i + 1}.jpg`);
