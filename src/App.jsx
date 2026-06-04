@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const socialLinks = [
   { name: "X", href: "https://x.com/Richardx122", icon: "𝕏" },
@@ -44,7 +44,16 @@ const text = {
 export default function App() {
   const [dark, setDark] = useState(false);
   const [lang, setLang] = useState("en");
+  const [visitors, setVisitors] = useState(0);
+
   const t = text[lang];
+
+  useEffect(() => {
+  fetch("/api/visitors")
+    .then((res) => res.json())
+    .then((data) => setVisitors(data.visitors))
+    .catch(() => setVisitors(0));
+}, []);
 
   return (
     <main className={`min-h-screen transition ${dark ? "bg-[#07070b] text-white" : "bg-[#f4fbff] text-[#101014]"}`}>
@@ -102,8 +111,16 @@ export default function App() {
           </p>
 
           <p className={`mt-6 max-w-xl text-lg leading-8 ${dark ? "text-white/55" : "text-black/60"}`}>
-            {t.desc}
-          </p>
+  {t.desc}
+</p>
+
+<p
+  className={`mt-4 text-sm font-semibold ${
+    dark ? "text-cyan-300" : "text-cyan-600"
+  }`}
+>
+  Visitors: {visitors}
+</p>
         </div>
 
         <div className="relative flex h-72 w-72 items-center justify-center rounded-full border border-cyan-300/30 bg-gradient-to-br from-cyan-300/20 via-white/10 to-violet-500/20 shadow-[0_0_80px_rgba(34,211,238,0.25)] md:h-96 md:w-96">
@@ -135,6 +152,48 @@ export default function App() {
         </span>
       ))}
     </div>
+  </div>
+</section>
+
+<section className="mx-auto max-w-7xl px-6 py-10 md:px-12 lg:px-20">
+  <div className={`rounded-[2rem] border p-8 md:p-10 ${dark ? "border-white/10 bg-white/[0.06]" : "border-black/10 bg-white"}`}>
+    <h2 className="text-3xl font-black">Contact me</h2>
+
+    <form
+      action="https://formspree.io/f/xzdqbkpy"
+      method="POST"
+      className="mt-6 grid gap-4"
+    >
+      <input
+        name="name"
+        placeholder="Your name"
+        required
+        className="rounded-2xl border border-black/10 p-4 text-black"
+      />
+
+      <input
+        name="email"
+        type="email"
+        placeholder="Your email"
+        required
+        className="rounded-2xl border border-black/10 p-4 text-black"
+      />
+
+      <textarea
+        name="message"
+        placeholder="Your message"
+        required
+        rows="5"
+        className="rounded-2xl border border-black/10 p-4 text-black"
+      />
+
+      <button
+        type="submit"
+        className="rounded-2xl bg-cyan-400 px-6 py-4 font-bold text-black"
+      >
+        Send message
+      </button>
+    </form>
   </div>
 </section>
 
