@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const socialLinks = [
   { name: "X", href: "https://x.com/Richardx122", icon: "𝕏" },
@@ -7,6 +7,30 @@ const socialLinks = [
 ];
 
 const artImages = Array.from({ length: 16 }, (_, i) => `/art/art-${i + 1}.jpg`);
+
+const featuredProjects = [
+  {
+    name: "ArcSub",
+    tag: "Stablecoin Subscription Payments",
+    desc: "A subscription payment dApp built around recurring stablecoin payments, merchant plans, coupons, trials, grace periods, and multi-token support.",
+    demo: "https://richard12021.github.io/Arcsubb/",
+    github: "https://github.com/Richard12021/ArcsubV3",
+  },
+  {
+    name: "Concrete Yield Ladder",
+    tag: "DeFi Vault Strategy",
+    desc: "A DeFi concept focused on auto-rollover yield strategies, vault infrastructure, capital efficiency, and sustainable onchain yield.",
+    demo: "https://richard12021.github.io/concrete/",
+    github: "https://github.com/Richard12021/concrete",
+  },
+  {
+    name: "Seismic Adventure Game",
+    tag: "Encrypted Blockchain Community",
+    desc: "Community content, memes, testnet education, and ecosystem awareness around Seismic's privacy-focused blockchain narrative.",
+    demo: "https://richard12021.github.io/seismic/",
+    github: "https://github.com/Richard12021/seismic",
+  },
+];
 
 const text = {
   en: {
@@ -44,9 +68,34 @@ const text = {
 export default function App() {
   const [dark, setDark] = useState(false);
   const [lang, setLang] = useState("en");
+  const [musicOn, setMusicOn] = useState(false);
+const bgMusicRef = useRef(null);
+const clickSoundRef = useRef(null);
   const [visitors, setVisitors] = useState(0);
 
   const t = text[lang];
+
+  const playClickSound = () => {
+  if (clickSoundRef.current) {
+    clickSoundRef.current.currentTime = 0;
+    clickSoundRef.current.play().catch(() => {});
+  }
+};
+
+const toggleMusic = () => {
+  playClickSound();
+
+  if (!bgMusicRef.current) return;
+
+  if (musicOn) {
+    bgMusicRef.current.pause();
+  } else {
+    bgMusicRef.current.volume = 0.35;
+    bgMusicRef.current.play().catch(() => {});
+  }
+
+  setMusicOn(!musicOn);
+};
 
   useEffect(() => {
   fetch("/api/visitors")
@@ -57,6 +106,13 @@ export default function App() {
 
   return (
     <main className={`min-h-screen transition ${dark ? "bg-[#07070b] text-white" : "bg-[#f4fbff] text-[#101014]"}`}>
+      <audio ref={bgMusicRef} loop>
+  <source src="/audio/bg-music.mp3" type="audio/mpeg" />
+</audio>
+
+<audio ref={clickSoundRef}>
+  <source src="/audio/click.mp3" type="audio/mpeg" />
+</audio>
       <style>
   {`
     @keyframes marquee {
@@ -94,6 +150,15 @@ export default function App() {
         >
           🌙
         </button>
+
+        <button
+  onClick={toggleMusic}
+  className={`rounded-full px-4 py-2 text-sm font-bold shadow-lg ${
+    dark ? "bg-white/10 text-white" : "bg-white text-black"
+  }`}
+>
+  {musicOn ? "🔊" : "🔇"}
+</button>
       </div>
 
       <section className="mx-auto flex max-w-7xl flex-col items-center gap-12 px-6 py-20 md:flex-row md:justify-between md:px-12 lg:px-20">
@@ -152,6 +217,62 @@ export default function App() {
         </span>
       ))}
     </div>
+  </div>
+</section>
+
+<section className="mx-auto max-w-7xl px-6 py-10 md:px-12 lg:px-20">
+  <div className="mb-8">
+    <h2 className="text-3xl font-black">Featured Projects</h2>
+    <p className={`mt-3 ${dark ? "text-white/55" : "text-black/55"}`}>
+      Selected Web3 projects, dApps, and ecosystem work I have contributed to.
+    </p>
+  </div>
+
+  <div className="grid gap-5 md:grid-cols-2">
+    {featuredProjects.map((project) => (
+      <div
+        key={project.name}
+        className={`rounded-[2rem] border p-6 transition hover:-translate-y-1 ${
+          dark
+            ? "border-white/10 bg-white/[0.06]"
+            : "border-black/10 bg-white"
+        }`}
+      >
+        <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-cyan-400">
+          {project.tag}
+        </p>
+
+        <h3 className="text-2xl font-black">{project.name}</h3>
+
+        <p className={`mt-4 leading-7 ${dark ? "text-white/60" : "text-black/60"}`}>
+          {project.desc}
+        </p>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a
+            href={project.demo}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-xl bg-cyan-400 px-5 py-3 text-sm font-bold text-black"
+          >
+            View Demo
+          </a>
+
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noreferrer"
+            className={`rounded-xl border px-5 py-3 text-sm font-bold ${
+              dark
+                ? "border-white/10 text-white"
+                : "border-black/10 text-black"
+            }`}
+          >
+            GitHub
+          </a>
+        </div>
+      </div>
+    ))}
   </div>
 </section>
 
