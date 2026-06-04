@@ -70,31 +70,24 @@ export default function App() {
   const [lang, setLang] = useState("en");
   const [musicOn, setMusicOn] = useState(false);
 const bgMusicRef = useRef(null);
-const clickSoundRef = useRef(null);
   const [visitors, setVisitors] = useState(0);
 
   const t = text[lang];
 
-  const playClickSound = () => {
-  if (clickSoundRef.current) {
-    clickSoundRef.current.currentTime = 0;
-    clickSoundRef.current.play().catch(() => {});
-  }
-};
 
 const toggleMusic = () => {
-  playClickSound();
+  const audio = bgMusicRef.current;
+  if (!audio) return;
 
-  if (!bgMusicRef.current) return;
-
-  if (musicOn) {
-    bgMusicRef.current.pause();
+  if (!musicOn) {
+    audio.volume = 0.35;
+    audio.play().catch(() => {});
+    setMusicOn(true);
   } else {
-    bgMusicRef.current.volume = 0.35;
-    bgMusicRef.current.play().catch(() => {});
+    audio.pause();
+    audio.currentTime = 0;
+    setMusicOn(false);
   }
-
-  setMusicOn(!musicOn);
 };
 
   useEffect(() => {
@@ -110,9 +103,6 @@ const toggleMusic = () => {
   <source src="/audio/bg-music.mp3" type="audio/mpeg" />
 </audio>
 
-<audio ref={clickSoundRef}>
-  <source src="/audio/click.mp3" type="audio/mpeg" />
-</audio>
       <style>
   {`
     @keyframes marquee {
